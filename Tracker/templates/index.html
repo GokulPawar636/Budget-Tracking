@@ -5,52 +5,84 @@
     <meta charset="UTF-8">
     <title>Budget Tracker</title>
     <link rel="stylesheet" href="{% static 'Tracker/css/main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+
 <body>
 
 <div class="container">
-    <h2>Budget Tracker</h2>
+    <h2>💰 Budget Tracker</h2>
 
+    <!-- BALANCE -->
     <div class="balance">
-        <p>YOUR BALANCE</p>
-        <h1>$0.00</h1>
+        <p>Your Balance</p>
+        <h1>₹ {{ current_balance.current_balance }}</h1>
     </div>
 
+    <!-- INCOME / EXPENSE -->
     <div class="inc-exp-container">
-        <div>
-            <h4>INCOME</h4>
-            <p class="money plus">+$0.00</p>
+        <div class="income-box">
+            <h4>Income</h4>
+            <p class="money plus">+ ₹ {{ income }}</p>
         </div>
-        <div>
-            <h4>EXPENSES</h4>
-            <p class="money minus">-$0.00</p>
+        <div class="expense-box">
+            <h4>Expenses</h4>
+            <p class="money minus">- ₹ {{ expense }}</p>
         </div>
     </div>
 
-    <h3>History</h3>
-    <ul class="list">
-        <!-- Transactions will appear here -->
+    <!-- HISTORY -->
+    <h3>Transaction History</h3>
+   <ul class="list">
+        {% for transaction in transactions %}
+            <li class="{% if transaction.expense_type == 'DEBIT' %}minus{% else %}plus{% endif %}">
+                <span class="text">{{ transaction.description }}</span>
+
+                <div class="right">
+                    <span class="amount">
+                        {% if transaction.expense_type == 'DEBIT' %}-{% else %}+{% endif %}
+                        ₹ {{ transaction.amount }}
+                    </span>
+
+                    <form method="POST" action="/delete/{{ transaction.id }}/">
+                        {% csrf_token %}
+                        <button class="delete-btn" type="submit"
+                                onclick="return confirm('Delete this transaction?')">
+                            ✖
+                        </button>
+                    </form>
+
+                </div>
+            </li>
+        {% empty %}
+            <li class="empty">No transactions yet</li>
+        {% endfor %}
     </ul>
 
-    <h3>Add new transaction</h3>
 
-    <form>
+    <!-- ADD TRANSACTION -->
+    <h3>Add New Transaction</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+
         <div class="form-control">
             <label>Description</label>
-            <input type="text" placeholder="Enter description...">
+            <input type="text" name="description" placeholder="Enter description..." required>
         </div>
 
         <div class="form-control">
             <label>
-                Amount <br>
+                Amount
                 <small>(-100 = expense, 100 = income)</small>
             </label>
-            <input type="number" placeholder="Enter amount...">
+            <input type="number" name="amount" placeholder="Enter amount..." required>
         </div>
 
-        <button class="btn">Add transaction</button>
+        <button class="btn" type="submit">Add Transaction</button>
     </form>
+
 </div>
 
 </body>
