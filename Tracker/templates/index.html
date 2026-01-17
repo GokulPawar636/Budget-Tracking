@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" href="{% static 'Tracker/css/main.css' %}">
+</head>
+<body>
+<body>
+
+<div class="container">
+    <h2>Budget Tracker</h2>
+
+    <div class="balance">
+        <p>YOUR BALANCE</p>
+        <h1>$0.00</h1>
+    </div>
+
+    <div class="inc-exp-container">
+        <div>
+            <h4>INCOME</h4>
+            <p class="money plus">+$0.00</p>
+        </div>
+        <div>
+            <h4>EXPENSES</h4>
+            <p class="money minus">-$0.00</p>
+        </div>
+    </div>
+
+    <h3>History</h3>
+    <ul class="list">
+        <!-- Transactions will appear here -->
+    </ul>
+
+    <h3>Add new transaction</h3>
+
+    <form>
+        <div class="form-control">
+            <label>Description</label>
+            <input type="text" placeholder="Enter description...">
+        </div>
+
+        <div class="form-control">
+            <label>
+                Amount <br>
+                <small>(-100 = expense, 100 = income)</small>
+            </label>
+            <input type="number" placeholder="Enter amount...">
+        </div>
+
+        <button class="btn">Add transaction</button>
+    </form>
+</div>
+
+</body>
+</html>
