@@ -1,8 +1,64 @@
 from django.shortcuts import render, redirect
 from .models import CurrentBalance, TrackingHistory
 from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login
 
 
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Check if user exists
+        if not User.objects.filter(username=username).exists():
+            messages.error(request, 'Username does not exist')
+            return redirect('login')
+
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+
+        if user is None:
+            messages.error(request, 'Invalid username or password')
+            return redirect('login')
+
+        # Login user
+        auth_login(request, user)
+        return redirect('index')
+
+    return render(request, 'login.html')
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not all([username, first_name, last_name, password, confirm_password]):
+            messages.error(request, 'All fields are required')
+            return redirect('register')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return redirect('register')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists')
+            return redirect('register')
+
+        user = User.objects.create_user(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            password=password
+        )
+
+        messages.success(request, 'Account created successfully. Please login.')
+        return redirect('login')
+
+    return render(request, 'register.html')
 def index(request):
     if request.method == 'POST' and request.POST.get('action') == 'add':
         description = request.POST.get("description")

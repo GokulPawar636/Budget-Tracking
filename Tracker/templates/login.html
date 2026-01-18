@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style ="margin-top: -80px !important;">
+    <form method="POST" id = "form">
+        {% csrf_token %}
+             <h3 class = "text-center">Login Page</h3>
+        <input type="hidden" name="action" value="add">
+
+        <div class="form-control">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter Username..." required>
+        </div>
+
+        <div class="form-control">
+            <label>
+                Password
+                <small>(Enter a correct password)</small>
+            </label>
+            <input type="password" name="password" placeholder="Enter password..." required>
+        </div>
+        <p> Don't have an account? <a href="{% url "register" %}">Register</a></p>
+        <button class="btn" type="submit">Login</button>
+    </form>
+    </div>
+{% endblock %}
