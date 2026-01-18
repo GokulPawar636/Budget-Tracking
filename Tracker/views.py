@@ -3,7 +3,8 @@ from .models import CurrentBalance, TrackingHistory
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate,logout as auth_logout,login as auth_login      
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
@@ -28,6 +29,14 @@ def login(request):
         return redirect('index')
 
     return render(request, 'login.html')
+
+
+def logout(request):
+    auth_logout(request)
+    return redirect('login')
+
+
+
 def register(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -59,6 +68,7 @@ def register(request):
         return redirect('login')
 
     return render(request, 'register.html')
+@login_required(login_url='login')
 def index(request):
     if request.method == 'POST' and request.POST.get('action') == 'add':
         description = request.POST.get("description")

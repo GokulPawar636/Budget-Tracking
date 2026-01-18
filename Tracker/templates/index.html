@@ -12,27 +12,35 @@
 </head>
 
 <body>
+    <a href="{% url 'logout' %}" class="logout-btn"
+    onclick="return confirm('Are you sure you want to logout?')">
+    Logout
+    </a>
+    <div class="container">
+        <a class ="btn" style="float: right; margin-top: 10px;  margin-right: 10px; background-color: #007bff; color: white; border-radius: 5px;" href="{% url 'logout' %}">Logout</a>
+        <h2>💰 Budget Tracker</h2>
+         {{request.user.username}}
+        {{request.user.first_name}}
+        {{request.user.last_name}}
+       
 
-<div class="container">
-    <h2>💰 Budget Tracker</h2>
-
-    <!-- BALANCE -->
-    <div class="balance">
-        <p>Your Balance</p>
-        <h1>₹ {{ current_balance.current_balance  }}</h1>
-    </div>
-
-    <!-- INCOME / EXPENSE -->
-    <div class="inc-exp-container">
-        <div class="income-box">
-            <h4>Income</h4>
-            <p class="money plus">+ ₹ {{ income }}</p>
+        <!-- BALANCE -->
+        <div class="balance">
+            <p>Your Balance</p>
+            <h1>₹ {{ current_balance.current_balance  }}</h1>
         </div>
-        <div class="expense-box">
-            <h4>Expenses</h4>
-            <p class="money minus">- ₹ {{ expense }}</p>
+
+        <!-- INCOME / EXPENSE -->
+        <div class="inc-exp-container">
+            <div class="income-box">
+                <h4>Income</h4>
+                <p class="money plus">+ ₹ {{ income }}</p>
+            </div>
+            <div class="expense-box">
+                <h4>Expenses</h4>
+                <p class="money minus">- ₹ {{ expense }}</p>
+            </div>
         </div>
-    </div>
 
     <!-- HISTORY -->
     <h3>Transaction History</h3>
